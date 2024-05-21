@@ -5,11 +5,17 @@ cards.forEach(card => card.addEventListener('click', flip));
 let flipped = [];
 
 function flip(e){
+    this.removeEventListener('click', flip)
     flipped.push(this);
     this.classList.add('active');
     if (flipped.length === 2){
+        removeAllClicks();
         checkCards();
     }
+}
+
+function removeAllClicks(){
+    cards.forEach(card => card.removeEventListener('click', flip));
 }
 
 function checkCards(){
@@ -18,13 +24,20 @@ function checkCards(){
 
     console.log('flipped')
     if(back1.innerHTML === back2.innerHTML){
-
+        flipped = [];
+        returnClicks();
     } else {
         setTimeout(()=>{
             flipped.forEach(card => card.classList.remove('active'));
             flipped = []
+            returnClicks();
         },700)
     }
+}
+
+function returnClicks(){
+    let notActive = document.querySelectorAll('.card:not(.active)');
+    notActive.forEach(card => card.addEventListener('click', flip))
 }
 
 function createGrid(){
